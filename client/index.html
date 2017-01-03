@@ -8,6 +8,8 @@
     <!-- dependencies -->
     <script src="bower_components/jquery/dist/jquery.js"></script>
     <script src="bower_components/underscore/underscore.js"></script>
+
+    
     <script>
       // YOU DO NOT NEED TO EDIT THIS CODE
       if (!/(&|\?)username=/.test(window.location.search)) {
@@ -29,13 +31,21 @@
       <!-- Your HTML goes here! -->
       <div id="chats">
         <div>Select a room <br>
-        <select id="roomSelect">
-        </select>
+          <select id="roomSelect">
+          <option value="lobby" id="lobby">lobby</option>
+          </select><br>
+          <button type="button" id="createRoomButton">Create New Room!</button>
         </div>
-        <form>
-          Write a message <br>
-          <input type="text" name="messageForm">
-        </form>
+        
+          <form>
+            Write a message <br>
+            <span>
+              <input type="text" name="messageForm" id="messageForm">
+              <button type="button" id="send" class="submit">Send!</button>
+            </span>
+          </form>
+          
+
       </div>
 
     </div>
