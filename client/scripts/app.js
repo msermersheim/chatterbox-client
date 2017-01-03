@@ -31,7 +31,8 @@
       // This is the url you should use to communicate with the parse API server.
       url: this.server,
       type: 'GET',
-      data: 'order=-createdAt',
+      data: 'order=-createdAt', 
+      //data: 'where={"roomname": "lobby"}',
       contentType: 'application/json',
       success: function (data) {
         console.log('chatterbox: message received from server', data);
@@ -85,6 +86,11 @@
       if (roomname !== null) {
         app.renderRoom(roomname);
       }
+    });
+
+    $('#loadMessageButton').on('click', function () {
+      app.fetch();
+      console.log('hahahah');
     });
     
   });
