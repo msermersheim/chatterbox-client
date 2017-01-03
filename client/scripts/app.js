@@ -48,9 +48,15 @@ app.clearMessages = function () {
 
 
 app.renderMessage = function (message) {
-  $('#chats').prepend('<div> <a href="#' + message.username + '">' + message.username + '</a>' + '<br>' + message.text + '</div>');
+  $('#chats').prepend('<div class="username"> <a href="#' + message.username + '">' + message.username + '</a>' + '<br>' + message.text + '</div>');
 };
 
 app.renderRoom = function(roomname) {
   $('#roomSelect').prepend('<option value="' + roomname + '">' + roomname + '</option>');
+};
+
+app.handleUsernameClick = function (username) {
+  $('.username').on('click', function (username) {
+
+  });
 };
