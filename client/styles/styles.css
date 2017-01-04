@@ -91,3 +91,7 @@ form input[type=text] {
 #roomSelect {
     margin-bottom: 10px;
 }
+.username {
+    margin-bottom: 5px;
+    border: dotted;
+}

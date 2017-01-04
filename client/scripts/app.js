@@ -32,10 +32,15 @@
       url: this.server,
       type: 'GET',
       data: 'order=-createdAt', 
-      //data: 'where={"roomname": "lobby"}',
+      data: 'where={"roomname": "lobby"}',
       contentType: 'application/json',
       success: function (data) {
-        console.log('chatterbox: message received from server', data);
+        console.log('chatterbox: message received from server');
+        $('#chats').empty();
+        for (var i = data.results.length - 1; i >= 0; i--) {
+          //console.log(data.results[i]);
+          app.renderMessage(data.results[i]);
+        }
       },
       error: function (data) {
         // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
@@ -51,9 +56,12 @@
     };
 
     app.renderMessage = function (message) {
-      $('#chats').prepend('<div class="username" id="' + message.username + '">' + message.username + '</a>' + '<br>' + message.text + '</div>');
+      var messageName = escapeHtml(message.username);
+      var messageText = escapeHtml(message.text);
+      $('#chats').prepend('<div class="username" value="dogecoin">' + '<b>' + messageName + '</b>' + '<br>' + messageText + '</div>');
       $('.username').on('click', function () {
         //console.log('These arent the droids youre looking for.');
+        //console.log($('this').val());
         app.handleUsernameClick();
       });
     };
@@ -63,7 +71,7 @@
     };
 
     app.handleUsernameClick = function () {
-      console.log('These arent the droids youre looking for.');
+      //console.log('These arent the droids youre looking for.');
     };
 
     app.handleSubmit = function () {
@@ -94,5 +102,20 @@
     });
     
   });
+
+  var entityMap = {
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': '&quot;',
+    "'": '&#39;',
+    "/": '&#x2F;'
+  };
+
+  var escapeHtml = function (string) {
+    return String(string).replace(/[&<>"'\/]/g, function (s) {
+      return entityMap[s];
+    });
+  };
 
 
