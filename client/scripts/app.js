@@ -26,20 +26,27 @@
     });
   };
 
-  app.fetch = function () {
+  app.fetch = function (roomname) {
+    var roomnameConstraint = "'where'={\"roomname\": \"" + roomname + "\"}'";
+    // console.log("fetch string", roomnameConstraint);
     $.ajax({
       // This is the url you should use to communicate with the parse API server.
       url: this.server,
       type: 'GET',
       data: 'order=-createdAt', 
-      data: 'where={"roomname": "lobby"}',
+      data: roomnameConstraint,
       contentType: 'application/json',
       success: function (data) {
-        console.log('chatterbox: message received from server');
+        console.log('chatterbox: message received from server', data);
         $('#chats').empty();
+        var roomnameArray = []; //stores unique roomnames;
         for (var i = data.results.length - 1; i >= 0; i--) {
           //console.log(data.results[i]);
           app.renderMessage(data.results[i]);
+          if (roomnameArray.indexOf(data.results[i].roomname) < 0) {
+            roomnameArray.push(data.results[i].roomname);
+            app.renderRoom(data.results[i].roomname);
+          }
         }
       },
       error: function (data) {
@@ -58,7 +65,8 @@
     app.renderMessage = function (message) {
       var messageName = escapeHtml(message.username);
       var messageText = escapeHtml(message.text);
-      $('#chats').prepend('<div class="username" value="dogecoin">' + '<b>' + messageName + '</b>' + '<br>' + messageText + '</div>');
+      var messageRoom = escapeHtml(message.roomname);
+      $('#chats').prepend('<div class="username ' + messageRoom + '" value="dogecoin">' + '<b>' + messageName + '</b>' + '<br>' + messageText + '</div>');
       $('.username').on('click', function () {
         //console.log('These arent the droids youre looking for.');
         //console.log($('this').val());
@@ -67,7 +75,7 @@
     };
 
     app.renderRoom = function(roomname) {
-      $('#roomSelect').append('<option value="' + roomname + '"' + 'id="' + roomname + '">' + roomname + '</option>');
+      $('#roomSelect').append('<option value="' + roomname + '"' + 'class="' + roomname + '">' + roomname + '</option>');
     };
 
     app.handleUsernameClick = function () {
@@ -101,15 +109,22 @@
       console.log('hahahah');
     });
     
+    $('#roomSelect').on('change', function () {
+      var roomSelectIndex = document.getElementById('roomSelect').selectedIndex;
+      var specificRoomname = document.getElementById('roomSelect').options[roomSelectIndex].value.toString();
+      console.log(specificRoomname);
+      $('#roomSelect ')      
+    });
+
   });
 
   var entityMap = {
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
     '"': '&quot;',
-    "'": '&#39;',
-    "/": '&#x2F;'
+    '\'': '&#39;',
+    '/': '&#x2F;'
   };
 
   var escapeHtml = function (string) {
@@ -117,5 +132,10 @@
       return entityMap[s];
     });
   };
+
+
+
+
+
 
 
